@@ -231,7 +231,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const reset = useCallback(async () => {
     cancelInFlight();
     await clearAll();
+    // Start with a clean state
     dispatch({ type: "INIT", payload: initialState });
+    // Immediately create a new session id for the fresh conversation
+    try {
+      const { sessionId } = await createSession();
+      dispatch({ type: "SET_SESSION", sessionId });
+      await saveSessionId(sessionId);
+    } catch {}
+    // Bootstrap the greeting message
     dispatch({
       type: "ADD_MESSAGE",
       message: {

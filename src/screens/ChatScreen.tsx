@@ -7,7 +7,7 @@ import { Composer } from "../components/Composer";
 import { ConfirmBar } from "../components/ConfirmBar";
 
 export const ChatScreen: React.FC = () => {
-  const { state, sendUserMessage, retryLast, cancelInFlight } = useChatStore();
+  const { state, sendUserMessage, retryLast, cancelInFlight, reset } = useChatStore();
 
   const showConfirm = state.context.state === "confirming";
   const lastError = useMemo(() => state.errors[state.errors.length - 1], [state.errors]);
@@ -18,6 +18,9 @@ export const ChatScreen: React.FC = () => {
         <View style={styles.headerRow}>
           <Text style={styles.title}>#support-bot</Text>
           <View style={styles.headerActions}>
+            <TouchableOpacity onPress={reset} style={styles.newBtn}>
+              <Text style={styles.newText}>New</Text>
+            </TouchableOpacity>
             <Text style={styles.latency}>{state.lastLatencyMs ? `Last: ${state.lastLatencyMs} ms` : ""}</Text>
             {state.pending ? (
               <TouchableOpacity onPress={cancelInFlight} style={styles.cancelBtn}>
@@ -74,6 +77,8 @@ const styles = StyleSheet.create({
   },
   title: { color: '#0f172a', fontSize: 18, fontWeight: '600' },
   headerActions: { flexDirection: 'row', alignItems: 'center' },
+  newBtn: { marginRight: 8, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, backgroundColor: '#0ea5e9' },
+  newText: { color: '#ffffff', fontSize: 12 },
   latency: { color: '#64748b', fontSize: 12, marginRight: 8 },
   cancelBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, backgroundColor: '#ef4444' },
   cancelText: { color: '#ffffff', fontSize: 12 },
